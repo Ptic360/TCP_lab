@@ -1,0 +1,18 @@
+{
+  "name": "PA191 TCP tuning lab",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    // Runs a Docker daemon inside the Codespace (the container is started privileged).
+    // Kathara's devices run in this daemon and share the Codespace VM's kernel.
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "hostRequirements": {
+    "cpus": 2
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "customizations": {
+    "codespaces": {
+      "openFiles": ["README.md"]
+    }
+  }
+}
