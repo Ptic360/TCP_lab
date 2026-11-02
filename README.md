@@ -102,8 +102,13 @@ This lab runs in **GitHub Codespaces**: a Linux machine in the cloud that you us
 
 1. Open the assignment repository: **[TCP_lab](https://github.com/Ptic360/TCP_lab.git)**
 2. Click the green **Code** button → **Codespaces** tab → **Create codespace on main**. The default 2-core machine is enough.
-3. The first start takes a few minutes. You need to wait until the setup script finishes installing all necessary packages. It may take a few seconds before the script starts. Wait until the terminal at the bottom of the window is ready.
-4. Start the lab:
+3. The first start takes a few minutes. It might seem like you get access to the terminal quickly, but you need to wait until the startup script starts (you will see "Running postCreateCommand..." in the terminal). Wait for the script to finish.
+4. Make the binaries executable: 
+```bash
+chmod +x start_lab grade_lab
+```
+
+5. Start the lab:
 
 ```bash
 sudo ./start_lab
