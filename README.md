@@ -69,6 +69,7 @@ Slow start ends when a loss is detected, or when a threshold is reached. The con
 - Cannot tell the difference between random packet loss and congestion -> very slow in the presence of packet loss, because it decreases the window faster than it can grow it back up.
 - The throughput can be estimated by the **Mathis formula**:
 	- **$Throughput \approx \frac{MSS}{RTT} \times \frac{1.22}{\sqrt{p}}$**, where $p$ represents random loss rate
+
 **CUBIC:**
 - The Linux default since 2006.
 - Reduces `cwnd` to 70 % after a loss instead of 50 %.
@@ -168,9 +169,9 @@ The `-R` flag is used to start a reverse transfer (from the server to the client
 
 To get more information about what is going on behind the scenes, run `ss -tin dst 10.0.1.2` on the **server** in a second terminal during a longer test (add `-t 30` to the iperf command). You will see two connections. The one with a large `bytes_sent` carries the download; the other is iperf’s control connection. Look at `wscale` (is it present, or missing?), `cwnd` (in segments), `snd_wnd` (the `rwnd` the client advertised, already in bytes), and the congestion control algorithm. 
 
-The link can carry 20 Mbps, but the download only reaches a few. Compare the result with $$Throughput\approx\frac{min(rwnd, cwnd \times MSS)}{RTT} \rightarrow \frac{Window}{RTT}$$Neither endpoint can keep more than a few tens of kilobytes in flight. You can also see the `unacked` count. If you multiply it by `MSS` (`ss` outputs it in bytes), you should get the size of the `snd_wnd`.
+The link can carry 20 Mbps, but the download only reaches a few. Compare the result with $$Throughput\approx\frac{min(rwnd, cwnd \times MSS)}{RTT} \rightarrow \frac{Window}{RTT}$$ Neither endpoint can keep more than a few tens of kilobytes in flight. You can also see the `unacked` count. If you multiply it by `MSS` (`ss` outputs it in bytes), you should get the size of the `snd_wnd`.
 
-**Task 1: Calculate the BDP in bytes:** Use the values from the start of the walkthrough. $$BDP = Bandwidth[bps] \times RTT [s]$$Don't forget to convert this number into **bytes** and write it alone (no units, no other text) into `/root/bdp.txt` on the **client**:
+**Task 1: Calculate the BDP in bytes:** Use the values from the start of the walkthrough. $$BDP = Bandwidth[bps] \times RTT [s]$$ Don't forget to convert this number into **bytes** and write it alone (no units, no other text) into `/root/bdp.txt` on the **client**:
 
 ```bash
 echo <YOUR_BDP> > /root/bdp.txt
@@ -200,7 +201,7 @@ iperf3 -c 10.0.2.2 -R -C reno
 iperf3 -c 10.0.2.2 -R -C cubic
 ```
 
-Both windows are now large enough, so flow control is no longer the limit. What limits the connection now is congestion control: every random loss makes the server back off, and on this path it cannot grow back fast enough. Plug the lab's values into the Mathis formula: $$Throughput \approx \frac{MSS[bits]}{RTT[s]} \times \frac{1.22}{\sqrt{p}}$$and compare the estimate with your measurement. CUBIC is usually somewhat better than Reno, but it still held back by being loss-based (if you run it multiple times, you can see it start fast and quickly decline after a few losses).
+Both windows are now large enough, so flow control is no longer the limit. What limits the connection now is congestion control: every random loss makes the server back off, and on this path it cannot grow back fast enough. Plug the lab's values into the Mathis formula: $$Throughput \approx \frac{MSS[bits]}{RTT[s]} \times \frac{1.22}{\sqrt{p}}$$ and compare the estimate with your measurement. CUBIC is usually somewhat better than Reno, but it still held back by being loss-based (if you run it multiple times, you can see it start fast and quickly decline after a few losses).
 
 **Task 4: Congestion Control (Server)** 
 On the **server**:
